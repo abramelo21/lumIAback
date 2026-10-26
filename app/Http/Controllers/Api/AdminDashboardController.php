@@ -19,15 +19,20 @@ class AdminDashboardController extends Controller
     public function analyses(): JsonResponse
     {
         $items = Analysis::query()
-            ->with('resume:id,target_area,status,created_at')
+            ->with(['resume.user:id,name,email', 'report:id,analysis_id'])
             ->latest()
-            ->limit(50)
+            ->limit(100)
             ->get()
             ->map(fn (Analysis $analysis) => [
                 'id' => $analysis->id,
                 'resume_id' => $analysis->resume_id,
                 'status' => $analysis->status->value,
                 'target_area' => $analysis->resume?->target_area?->value,
+                'target_area_label' => $analysis->resume?->target_area?->label(),
+                'original_filename' => $analysis->resume?->original_filename,
+                'participant_name' => $analysis->resume?->user?->name,
+                'participant_email' => $analysis->resume?->user?->email,
+                'has_report' => (bool) $analysis->report,
                 'started_at' => $analysis->started_at,
                 'completed_at' => $analysis->completed_at,
                 'error_message' => $analysis->error_message,

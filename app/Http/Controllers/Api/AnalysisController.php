@@ -13,7 +13,7 @@ class AnalysisController extends Controller
     public function show(Request $request, Analysis $analysis): JsonResponse
     {
         $this->authorize('view', $analysis);
-        $analysis->load(['resume', 'report', 'feedback']);
+        $analysis->load(['resume.user', 'report', 'feedback']);
 
         return response()->json([
             'data' => [
@@ -28,6 +28,14 @@ class AnalysisController extends Controller
                 'completed_at' => $analysis->completed_at,
                 'feedback' => $analysis->feedback,
                 'report' => $analysis->report,
+                'original_filename' => $analysis->resume?->original_filename,
+                'target_area' => $analysis->resume?->target_area?->value,
+                'target_area_label' => $analysis->resume?->target_area?->label(),
+                'participant' => [
+                    'id' => $analysis->resume?->user_id,
+                    'name' => $analysis->resume?->user?->name,
+                    'email' => $analysis->resume?->user?->email,
+                ],
             ],
         ]);
     }
