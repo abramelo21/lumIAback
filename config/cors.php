@@ -7,6 +7,8 @@ return [
     'allowed_origins_patterns' => [
         '#^https://[a-z0-9.-]+\.pages\.dev$#',
         '#^https://[a-z0-9-]+\.trycloudflare\.com$#',
+        '#^https://[a-z0-9-]+\.ngrok-free\.dev$#',
+        '#^https://[a-z0-9-]+\.ngrok-free\.app$#',
     ],
     'allowed_headers' => ['*'],
     'exposed_headers' => [],

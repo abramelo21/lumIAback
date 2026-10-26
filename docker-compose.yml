@@ -80,6 +80,30 @@ services:
     networks:
       - lumia
 
+  cloudflared-quick:
+    image: cloudflare/cloudflared:latest
+    container_name: lumia-quick-tunnel
+    restart: unless-stopped
+    profiles: ["quick"]
+    command: tunnel --no-autoupdate --url http://nginx:80
+    depends_on:
+      - nginx
+    networks:
+      - lumia
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: lumia-ngrok
+    restart: unless-stopped
+    profiles: ["ngrok"]
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+    command: http http://nginx:80 --url=${NGROK_DOMAIN}
+    depends_on:
+      - nginx
+    networks:
+      - lumia
+
 volumes:
   lumia_mysql:
 
