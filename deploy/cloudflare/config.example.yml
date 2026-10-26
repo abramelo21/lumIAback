@@ -1,0 +1,11 @@
+# Túnel nomeado (Zero Trust > Networks > Tunnels).
+# No hostname público, aponte o serviço para http://nginx:80
+# se o cloudflared estiver no docker compose.
+# Se o cloudflared rodar no Windows/WSL, use http://localhost:8000.
+tunnel: SEU_TUNNEL_ID
+credentials-file: /etc/cloudflared/credentials.json
+
+ingress:
+  - hostname: api.seudominio.com
+    service: http://nginx:80
+  - service: http_status:404
